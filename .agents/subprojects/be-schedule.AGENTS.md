@@ -1,4 +1,4 @@
-# Reglas del Backend (`nestjs-auth`) — Clicke Impulso
+# Reglas del Backend (`be-schedule`) — Clicke Impulso
 
 API REST construida con **NestJS 11**, **TypeORM 0.3**, **PostgreSQL**, **Passport JWT**, **Argon2id** y **Luxon**.
 
@@ -41,7 +41,7 @@ El módulo [`src/auth/`](./src/auth) atiende a dos clientes con mecanismos disti
    - Para cambios de esquema: crear o generar la migración en [`src/migrations/`](./src/migrations) (`npm run migration:generate -- src/migrations/NombreMigracion`) y verificarla con `npm run migration:run`.
 2. **Validación estricta de DTOs**:
    - `ValidationPipe` en [`src/main.ts`](./src/main.ts) tiene `whitelist: true` y `forbidNonWhitelisted: true`.
-   - Toda propiedad nueva enviada por `frontend` o `app-schedule` debe estar declarada en el DTO con su decorador de `class-validator` correspondiente, o la API devolverá `400 Bad Request`.
+   - Toda propiedad nueva enviada por `ft-schedule` o `app-schedule` debe estar declarada en el DTO con su decorador de `class-validator` correspondiente, o la API devolverá `400 Bad Request`.
 3. **Fechas y Zonas Horarias**:
    - Usar `Luxon` (`DateTime`) respetando el `timezone` de la organización (`organization.timezone`, por defecto `America/Argentina/Cordoba`).
 

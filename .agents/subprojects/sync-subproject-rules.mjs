@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Sincroniza los archivos AGENTS.md versionados en .agents/subprojects/
- * hacia las carpetas de los 3 subproyectos (nestjs-auth, frontend, app-schedule)
+ * hacia las carpetas de los 3 subproyectos (be-schedule, ft-schedule, app-schedule)
  * si están presentes en el workspace.
  */
 
@@ -15,12 +15,12 @@ const ROOT = path.resolve(__dirname, '../..')
 
 const MAPPINGS = [
   {
-    src: path.join(__dirname, 'nestjs-auth.AGENTS.md'),
-    dest: path.join(ROOT, 'nestjs-auth', 'AGENTS.md'),
+    src: path.join(__dirname, 'be-schedule.AGENTS.md'),
+    dest: path.join(ROOT, 'be-schedule', 'AGENTS.md'),
   },
   {
-    src: path.join(__dirname, 'frontend.AGENTS.md'),
-    dest: path.join(ROOT, 'frontend', 'AGENTS.md'),
+    src: path.join(__dirname, 'ft-schedule.AGENTS.md'),
+    dest: path.join(ROOT, 'ft-schedule', 'AGENTS.md'),
   },
   {
     src: path.join(__dirname, 'app-schedule.AGENTS.md'),

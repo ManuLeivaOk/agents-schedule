@@ -2,7 +2,7 @@
 /**
  * Script de verificación transversal del ecosistema Clicke Impulso.
  * Ejecuta chequeo de tipos TypeScript (`tsc --noEmit`) en los 3 repositorios
- * (`nestjs-auth`, `frontend`, `app-schedule`) y reporta el estado consolidado.
+ * (`be-schedule`, `ft-schedule`, `app-schedule`) y reporta el estado consolidado.
  *
  * Uso:
  *   node --no-warnings .agents/skills/clicke-engram/scripts/verify-ecosystem.mjs
@@ -20,15 +20,15 @@ const ROOT = path.resolve(__dirname, '../../../..')
 const TARGETS = [
   {
     id: 'backend',
-    name: 'Backend API (nestjs-auth)',
-    cwd: path.join(ROOT, 'nestjs-auth'),
+    name: 'Backend API (be-schedule)',
+    cwd: path.join(ROOT, 'be-schedule'),
     cmd: './node_modules/.bin/tsc',
     args: ['--noEmit'],
   },
   {
     id: 'web',
-    name: 'Web App (frontend)',
-    cwd: path.join(ROOT, 'frontend'),
+    name: 'Web App (ft-schedule)',
+    cwd: path.join(ROOT, 'ft-schedule'),
     cmd: './node_modules/.bin/tsc',
     args: ['--noEmit'],
   },
@@ -75,4 +75,3 @@ for (const item of summary) {
 }
 
 process.exit(hasFailure ? 1 : 0)
-

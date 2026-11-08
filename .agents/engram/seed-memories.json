@@ -4,10 +4,10 @@
     "scope": "global",
     "type": "architecture",
     "title": "Topología Tripartita del Workspace (Clicke Impulso)",
-    "content": "El workspace contiene 3 repositorios Git independientes sin paquete npm compartido: 1) `nestjs-auth` (Backend API en NestJS 11 + TypeORM + PostgreSQL + Luxon, puerto 3000), 2) `frontend` (App Web en Next.js 16 + React 19 + Tailwind v4 + Schedule-X, puerto 3001), 3) `app-schedule` (App Mobile nativa en Expo 58 + React Native 0.88 + Expo Router + TanStack Query v5). Al no existir paquete shared, los tipos y contratos HTTP se mantienen sincronizados explícitamente entre los 3 proyectos.",
+    "content": "El workspace contiene 3 repositorios Git independientes sin paquete npm compartido: 1) `be-schedule` (Backend API en NestJS 11 + TypeORM + PostgreSQL + Luxon, puerto 3000), 2) `ft-schedule` (App Web en Next.js 16 + React 19 + Tailwind v4 + Schedule-X, puerto 3001), 3) `app-schedule` (App Mobile nativa en Expo 58 + React Native 0.88 + Expo Router + TanStack Query v5). Al no existir paquete shared, los tipos y contratos HTTP se mantienen sincronizados explícitamente entre los 3 proyectos.",
     "files": [
-      "nestjs-auth/src/app.module.ts",
-      "frontend/package.json",
+      "be-schedule/src/app.module.ts",
+      "ft-schedule/package.json",
       "app-schedule/package.json"
     ],
     "revision": 1,
@@ -18,11 +18,11 @@
     "scope": "contracts",
     "type": "contract",
     "title": "Contrato Dual de Autenticación: Web (Cookie) vs Mobile (Body + SecureStore)",
-    "content": "El backend `nestjs-auth` soporta dos flujos de sesión sobre la misma rotación de familias de Refresh Tokens (SHA-256 en DB con detección de reuso):\n- Web (`frontend`): Usa `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`. El `accessToken` vive solo en memoria de JS (`src/lib/api-client.ts`) y el `refresh_token` viaja en cookie `httpOnly` (`SameSite=Strict`, `path: /auth`), sincronizando pestañas con `BroadcastChannel` y Web Locks.\n- Mobile (`app-schedule`): Usa `POST /auth/native/login`, `POST /auth/native/refresh`, `POST /auth/native/logout`. Devuelve y recibe `{ refreshToken }` en el body JSON. El `accessToken` vive en memoria y el `refreshToken` en `expo-secure-store` bajo la clave `clicke.refreshToken` (`src/auth/token-store.ts`). Nunca romper el contrato de cookies web al tocar auth nativo ni viceversa.",
+    "content": "El backend `be-schedule` soporta dos flujos de sesión sobre la misma rotación de familias de Refresh Tokens (SHA-256 en DB con detección de reuso):\n- Web (`ft-schedule`): Usa `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`. El `accessToken` vive solo en memoria de JS (`src/lib/api-client.ts`) y el `refresh_token` viaja en cookie `httpOnly` (`SameSite=Strict`, `path: /auth`), sincronizando pestañas con `BroadcastChannel` y Web Locks.\n- Mobile (`app-schedule`): Usa `POST /auth/native/login`, `POST /auth/native/refresh`, `POST /auth/native/logout`. Devuelve y recibe `{ refreshToken }` en el body JSON. El `accessToken` vive en memoria y el `refreshToken` en `expo-secure-store` bajo la clave `clicke.refreshToken` (`src/auth/token-store.ts`). Nunca romper el contrato de cookies web al tocar auth nativo ni viceversa.",
     "files": [
-      "nestjs-auth/src/auth/auth.controller.ts",
-      "nestjs-auth/src/auth/auth.service.ts",
-      "frontend/src/lib/api-client.ts",
+      "be-schedule/src/auth/auth.controller.ts",
+      "be-schedule/src/auth/auth.service.ts",
+      "ft-schedule/src/lib/api-client.ts",
       "app-schedule/src/auth/api.ts",
       "app-schedule/src/auth/token-store.ts"
     ],
@@ -36,8 +36,8 @@
     "title": "Modelo de Autorización en 3 Capas (Intersección AND: Rol + Feature + Vigencia)",
     "content": "El acceso a cualquier módulo requiere la intersección AND de:\n1. Rol global (`UserRole`: `USER` o `ADMIN` para `/backoffice`).\n2. Estado de la organización: Suscripción vigente (`paidUntil`) y Términos y Condiciones aceptados por el `OWNER` (`TermsAcceptance` / período de gracia).\n3. `OrganizationFeature` activa (calculada como `ALL_ORGANIZATION_FEATURES - disabledFeatures`): `APPOINTMENTS`, `CUSTOMERS`, `SERVICES`, `RESOURCES`, `ANALYTICS`, `AUTOMATIONS`, `IMPORTS`.\n4. `OrganizationRole` del miembro (`OWNER`, `ADMIN`, `STAFF`). `STAFF` solo opera Turnos, Agenda, Clientes (sin eliminar) y lectura de Servicios/Recursos; no accede a Dashboard (`ANALYTICS`), Automatizaciones (`AUTOMATIONS`) ni Importaciones (`IMPORTS`).",
     "files": [
-      "nestjs-auth/src/organizations/guards/org-roles.guard.ts",
-      "frontend/src/providers/auth-provider.tsx",
+      "be-schedule/src/organizations/guards/org-roles.guard.ts",
+      "ft-schedule/src/providers/auth-provider.tsx",
       "app-schedule/src/auth/roles.ts",
       "app-schedule/src/auth/admin-only.tsx"
     ],
@@ -49,11 +49,11 @@
     "scope": "contracts",
     "type": "contract",
     "title": "Contrato de Turnos (Appointments), Estados y Disponibilidad",
-    "content": "Los turnos usan los estados `PENDING`, `CONFIRMED`, `COMPLETED`, `CANCELLED`, `NO_SHOW`. El alta (`POST /appointments`) requiere `customerId`, `serviceId`, `resourceId`, `startsAt` (ISO 8601) y opcionalmente duración, precio, notas y canal (`WHATSAPP`, `WEB`, `PHONE`, `WALK_IN`, `INSTAGRAM`, `MANUAL`). La disponibilidad se consulta con `GET /availability` y `GET /availability/day`, y las reglas horarias por recurso con `GET/PUT /availability/resources/:id/rules` (`dayOfWeek`, `startTime`, `endTime`). Cualquier cambio en DTO o respuesta de `/appointments` debe reflejarse en `frontend/src/services/appointments-api.ts` y `app-schedule/src/appointments/api.ts` + `parse.ts`.",
+    "content": "Los turnos usan los estados `PENDING`, `CONFIRMED`, `COMPLETED`, `CANCELLED`, `NO_SHOW`. El alta (`POST /appointments`) requiere `customerId`, `serviceId`, `resourceId`, `startsAt` (ISO 8601) y opcionalmente duración, precio, notas y canal (`WHATSAPP`, `WEB`, `PHONE`, `WALK_IN`, `INSTAGRAM`, `MANUAL`). La disponibilidad se consulta con `GET /availability` y `GET /availability/day`, y las reglas horarias por recurso con `GET/PUT /availability/resources/:id/rules` (`dayOfWeek`, `startTime`, `endTime`). Cualquier cambio en DTO o respuesta de `/appointments` debe reflejarse en `ft-schedule/src/services/appointments-api.ts` y `app-schedule/src/appointments/api.ts` + `parse.ts`.",
     "files": [
-      "nestjs-auth/src/appointments/appointments.controller.ts",
-      "frontend/src/services/appointments-api.ts",
-      "frontend/src/types/appointments.ts",
+      "be-schedule/src/appointments/appointments.controller.ts",
+      "ft-schedule/src/services/appointments-api.ts",
+      "ft-schedule/src/types/appointments.ts",
       "app-schedule/src/appointments/api.ts",
       "app-schedule/src/appointments/parse.ts",
       "app-schedule/src/appointments/types.ts"
@@ -70,7 +70,7 @@
     "files": [
       "app-schedule/src/account/use-time-zone.ts",
       "app-schedule/src/appointments/format.ts",
-      "frontend/src/components/ui/appointments/appointment-card.tsx"
+      "ft-schedule/src/components/ui/appointments/appointment-card.tsx"
     ],
     "revision": 1,
     "updated_at": "2026-11-08T17:27:00-03:00"
@@ -80,10 +80,10 @@
     "scope": "global",
     "type": "decision",
     "title": "Sistema de Diseño e Identidad Visual Clicke (Web y Mobile)",
-    "content": "Fuente de verdad: `frontend/docs/clicke-identidad-visual.md` y `app-schedule/ADR-001-app-mobile.md`.\n- Tipografía: `Jost` (pesos 200, 300, 400, 500). En React Native el `letterSpacing` se expresa en puntos (ej. título pantalla 32pt peso 200 spacing 5.8 mayúsculas).\n- Colores de estado (Anillo de 12px borde 2.5px + etiqueta de texto, NUNCA solo color): `CONFIRMED` (#3285C2 lleno, Confirmado), `PENDING` (#D88D26 anillo, Pendiente), `CANCELLED` (#E4432F anillo, Cancelado), `COMPLETED` (#A9D4EC lleno, Completado), `NO_SHOW` (texto suave anillo, Ausente).\n- Accesibilidad: `#3285C2` no se usa como único borde de control interactivo (usar `#4A97D0`). Áreas tocables mínimas: 44pt (iOS) / 48dp (Android). El logo completo solo aparece en la pantalla de Login.",
+    "content": "Fuente de verdad: `ft-schedule/docs/clicke-identidad-visual.md` y `app-schedule/ADR-001-app-mobile.md`.\n- Tipografía: `Jost` (pesos 200, 300, 400, 500). En React Native el `letterSpacing` se expresa en puntos (ej. título pantalla 32pt peso 200 spacing 5.8 mayúsculas).\n- Colores de estado (Anillo de 12px borde 2.5px + etiqueta de texto, NUNCA solo color): `CONFIRMED` (#3285C2 lleno, Confirmado), `PENDING` (#D88D26 anillo, Pendiente), `CANCELLED` (#E4432F anillo, Cancelado), `COMPLETED` (#A9D4EC lleno, Completado), `NO_SHOW` (texto suave anillo, Ausente).\n- Accesibilidad: `#3285C2` no se usa como único borde de control interactivo (usar `#4A97D0`). Áreas tocables mínimas: 44pt (iOS) / 48dp (Android). El logo completo solo aparece en la pantalla de Login.",
     "files": [
-      "frontend/docs/clicke-identidad-visual.md",
-      "frontend/app/globals.css",
+      "ft-schedule/docs/clicke-identidad-visual.md",
+      "ft-schedule/app/globals.css",
       "app-schedule/src/theme/theme.ts",
       "app-schedule/src/components/status-badge.tsx"
     ],
@@ -107,12 +107,12 @@
     "topic_key": "backend/typeorm-and-security-invariants",
     "scope": "backend",
     "type": "decision",
-    "title": "Invariantes de Seguridad y Base de Datos en nestjs-auth",
+    "title": "Invariantes de Seguridad y Base de Datos en be-schedule",
     "content": "1. `synchronize: false` obligatorio en TypeORM: todo cambio de esquema en entidades (`*.entity.ts`) requiere generar y correr migración en `src/migrations/`.\n2. `ValidationPipe` global tiene `whitelist: true` y `forbidNonWhitelisted: true`: cualquier propiedad nueva enviada por Web o Mobile debe declararse explícitamente con decoradores de `class-validator` en el DTO correspondiente o la API responderá 400.\n3. Guards globales activos por defecto en `AppModule`: `ThrottlerGuard`, `JwtAccessGuard`, `RolesGuard`, `OrgRolesGuard`. Solo las rutas con `@Public()` omiten JWT.",
     "files": [
-      "nestjs-auth/src/main.ts",
-      "nestjs-auth/src/app.module.ts",
-      "nestjs-auth/src/config/typeorm.config.ts"
+      "be-schedule/src/main.ts",
+      "be-schedule/src/app.module.ts",
+      "be-schedule/src/config/typeorm.config.ts"
     ],
     "revision": 1,
     "updated_at": "2026-11-08T17:27:00-03:00"
@@ -124,8 +124,8 @@
     "title": "Contrato de Automatizaciones y WhatsApp Cloud API",
     "content": "Triggers: APPOINTMENT_CREATED, APPOINTMENT_UPCOMING, APPOINTMENT_COMPLETED, APPOINTMENT_CANCELLED. Delay units: MINUTES, HOURS, DAYS, WEEKS, MONTHS. Execution status: PENDING, PROCESSING, PROCESSED, FAILED, CANCELLED. El token de Meta WhatsApp se expone siempre enmascarado (accessTokenMasked) y solo se reemplaza mediante un campo seguro.",
     "files": [
-      "nestjs-auth/src/automations/entities/automation-rule.entity.ts",
-      "frontend/src/types/automations.ts",
+      "be-schedule/src/automations/entities/automation-rule.entity.ts",
+      "ft-schedule/src/types/automations.ts",
       "app-schedule/src/automations/types.ts"
     ],
     "revision": 1,
@@ -138,7 +138,7 @@
     "title": "Enums Reales de Recursos (ResourceType) y Origen de Turno (AppointmentSource)",
     "content": "ResourceType en backend/web/mobile es exactamente: PERSON | SPACE | EQUIPMENT | GENERIC. AppointmentSource es: ADMIN | CUSTOMER | IMPORT. En mobile todos los payloads externos pasan por parsers defensivos (src/*/parse.ts).",
     "files": [
-      "nestjs-auth/src/resources/entities/resource.entity.ts",
+      "be-schedule/src/resources/entities/resource.entity.ts",
       "app-schedule/src/catalog/types.ts",
       "app-schedule/src/appointments/parse.ts"
     ],

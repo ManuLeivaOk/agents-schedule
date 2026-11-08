@@ -2,7 +2,7 @@
 name: clicke-cross-stack-feature
 description: >-
   Step-by-step runbook for implementing or modifying a feature, endpoint, or domain
-  model across the 3 Clicke Impulso repositories (nestjs-auth backend, frontend web,
+  model across the 3 Clicke Impulso repositories (be-schedule backend, frontend web,
   and app-schedule mobile) while preserving DTO validation, RBAC/Feature flags,
   visual identity, and contract parity.
 ---
@@ -25,10 +25,10 @@ Use this workflow whenever a user request touches a shared domain (`appointments
 
 ---
 
-## Step 2: Backend Implementation (`nestjs-auth`)
+## Step 2: Backend Implementation (`be-schedule`)
 
 1. **Entity & Migration**:
-   - If modifying a `*.entity.ts` file, remember `synchronize: false` is enforced. Create or generate a migration in `nestjs-auth/src/migrations/`.
+   - If modifying a `*.entity.ts` file, remember `synchronize: false` is enforced. Create or generate a migration in `be-schedule/src/migrations/`.
 2. **DTO Validation (`whitelist: true`, `forbidNonWhitelisted: true`)**:
    - Every new request field MUST have `class-validator` decorators (`@IsString()`, `@IsOptional()`, `@IsEnum()`, etc.) on the DTO or the global `ValidationPipe` will reject requests with `400 Bad Request`.
 3. **Authorization Guards (`@OrgFeatures` & `@OrgRoles`)**:
@@ -38,14 +38,14 @@ Use this workflow whenever a user request touches a shared domain (`appointments
 
 ---
 
-## Step 3: Web Implementation (`frontend`)
+## Step 3: Web Implementation (`ft-schedule`)
 
 1. **Types & API Service**:
-   - Update the TypeScript interface in `frontend/src/types/*.ts` and the Axios call in `frontend/src/services/*-api.ts`.
+   - Update the TypeScript interface in `ft-schedule/src/types/*.ts` and the Axios call in `ft-schedule/src/services/*-api.ts`.
 2. **Permissions (`useAuth()`)**:
-   - Gate UI actions with `canAccess({ adminOnly, requiredFeature })` or `canManageOrganization` from `frontend/src/providers/auth-provider.tsx`.
+   - Gate UI actions with `canAccess({ adminOnly, requiredFeature })` or `canManageOrganization` from `ft-schedule/src/providers/auth-provider.tsx`.
 3. **Visual Identity**:
-   - Follow `frontend/docs/clicke-identidad-visual.md`: `Jost` font, semantic CSS variables (`--fondo`, `--superficie`, `--acento-fuerte`), status ring + text label (`status-badge.tsx`), and `es-AR` ARS currency formatting without decimals.
+   - Follow `ft-schedule/docs/clicke-identidad-visual.md`: `Jost` font, semantic CSS variables (`--fondo`, `--superficie`, `--acento-fuerte`), status ring + text label (`status-badge.tsx`), and `es-AR` ARS currency formatting without decimals.
 
 ---
 

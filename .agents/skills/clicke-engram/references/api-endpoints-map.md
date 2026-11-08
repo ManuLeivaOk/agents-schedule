@@ -1,8 +1,8 @@
 # Mapa de Endpoints HTTP y Clientes (Backend ↔ Web ↔ Mobile)
 
-Referencia rápida para localizar qué controlador de `nestjs-auth` responde cada ruta y qué módulos la consumen en `frontend` y `app-schedule`.
+Referencia rápida para localizar qué controlador de `be-schedule` responde cada ruta y qué módulos la consumen en `ft-schedule` y `app-schedule`.
 
-| Módulo / Ruta Base | Controlador Backend (`nestjs-auth/src/`) | Servicio Web (`frontend/src/services/`) | Cliente Mobile (`app-schedule/src/`) | Permisos (`@OrgFeatures` / `@OrgRoles`) |
+| Módulo / Ruta Base | Controlador Backend (`be-schedule/src/`) | Servicio Web (`ft-schedule/src/services/`) | Cliente Mobile (`app-schedule/src/`) | Permisos (`@OrgFeatures` / `@OrgRoles`) |
 | :--- | :--- | :--- | :--- | :--- |
 | `/auth/*` | `auth/auth.controller.ts` | `lib/api-client.ts`, `providers/auth-provider.tsx` | *No usa cookie web* | `@Public()` en login/register/refresh |
 | `/auth/native/*` | `auth/auth.controller.ts` | *No aplica en Web* | `auth/api.ts`, `auth/token-store.ts` | `@Public()` en native login/refresh/logout |

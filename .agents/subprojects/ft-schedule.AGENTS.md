@@ -8,7 +8,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 <!-- END:nextjs-agent-rules -->
 
-# Reglas del Frontend Web (`frontend`) — Clicke Impulso
+# Reglas del Frontend Web (`ft-schedule`) — Clicke Impulso
 
 Aplicación web construida con **Next.js 16.3 (App Router)**, **React 19**, **Tailwind CSS v4**, **Base UI (`@base-ui/react`) / shadcn**, **Schedule-X** y **Recharts**.
 

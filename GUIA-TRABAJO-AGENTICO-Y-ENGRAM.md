@@ -1,6 +1,6 @@
 # Guía de Trabajo Agéntico y Memoria Persistente (Clicke Engram)
 
-Este documento explica cómo funciona la infraestructura de inteligencia agéntica configurada en el workspace de **Clicke Impulso** (`nestjs-auth`, `frontend` y `app-schedule`), cómo aprovecharla en el día a día y por qué aporta una ventaja clave para el desarrollo del proyecto.
+Este documento explica cómo funciona la infraestructura de inteligencia agéntica configurada en el workspace de **Clicke Impulso** (`be-schedule`, `ft-schedule` y `app-schedule`), cómo aprovecharla en el día a día y por qué aporta una ventaja clave para el desarrollo del proyecto.
 
 ---
 
@@ -9,10 +9,10 @@ Este documento explica cómo funciona la infraestructura de inteligencia agénti
 El sistema combina **tres niveles complementarios** para que cualquier agente de IA trabaje con contexto completo sin saturar su ventana de tokens:
 
 ```text
-appCopada/
+agents-schedule/
 ├── AGENTS.md                                      # 1. Reglas Globales y Matriz de Paridad (Auto-cargado)
-├── nestjs-auth/AGENTS.md                          # 2. Reglas de Backend (Guards, TypeORM, Auth Dual, Luxon)
-├── frontend/AGENTS.md                             # 3. Reglas de Web (Next 16, Cookies, Tailwind v4, Identidad)
+├── be-schedule/AGENTS.md                          # 2. Reglas de Backend (Guards, TypeORM, Auth Dual, Luxon)
+├── ft-schedule/AGENTS.md                             # 3. Reglas de Web (Next 16, Cookies, Tailwind v4, Identidad)
 ├── app-schedule/AGENTS.md                         # 4. Reglas de Mobile (Expo 58, SecureStore, Jost, Stack)
 └── .agents/
     ├── engram/
@@ -40,7 +40,7 @@ appCopada/
 ## 2. ¿Por qué es tan positivo tenerlo en este proyecto?
 
 1. **Evita rupturas silenciosas entre los 3 repositorios (Cero deriva de contratos)**:
-   Como `nestjs-auth`, `frontend` y `app-schedule` son tres repositorios independientes sin una librería `shared-types`, un cambio en un DTO del backend o en un estado de turno puede romper la web o la app móvil sin dar error al compilar un solo repo. La **Matriz de Paridad** en `AGENTS.md` + el verificador `verify-ecosystem.mjs` obligan al agente a chequear los tres frentes.
+   Como `be-schedule`, `ft-schedule` y `app-schedule` son tres repositorios independientes sin una librería `shared-types`, un cambio en un DTO del backend o en un estado de turno puede romper la web o la app móvil sin dar error al compilar un solo repo. La **Matriz de Paridad** en `AGENTS.md` + el verificador `verify-ecosystem.mjs` obligan al agente a chequear los tres frentes.
 2. **Protege los invariantes críticos de seguridad y negocio**:
    - Impide que el agente rompa el **contrato dual de autenticación** (cookies `httpOnly` en Web vs. `refreshToken` en body + `expo-secure-store` en Mobile).
    - Recuerda siempre que `ValidationPipe` tiene `whitelist: true` y `forbidNonWhitelisted: true` (si falta un decorador en un DTO, el request falla con `400`).
@@ -57,7 +57,7 @@ appCopada/
 ## 3. ¿Cómo se usa en el día a día?
 
 ### A. Uso 100 % automático (No tenés que hacer nada extra)
-- **Al abrir o editar archivos**: Antigravity carga automáticamente [`AGENTS.md`](./AGENTS.md) y el `AGENTS.md` del subproyecto correspondiente (`nestjs-auth`, `frontend` o `app-schedule`).
+- **Al abrir o editar archivos**: Antigravity carga automáticamente [`AGENTS.md`](./AGENTS.md) y el `AGENTS.md` del subproyecto correspondiente (`be-schedule`, `ft-schedule` o `app-schedule`).
 - **Al pedir tareas transversales**: El agente activa por sí solo las skills `clicke-engram` o `clicke-cross-stack-feature`, consulta la memoria y verifica los contratos.
 
 ### B. Frases útiles que podés pedirle al agente en el chat
@@ -87,7 +87,7 @@ node --no-warnings .agents/engram/engram.mjs save \
   --type="decision" \
   --title="Título de la decisión" \
   --content="Explicación detallada" \
-  --files="nestjs-auth/src/main.ts"
+  --files="be-schedule/src/main.ts"
 
 # 5. Ejecutar el chequeo de TypeScript en los 3 repositorios a la vez
 node --no-warnings .agents/skills/clicke-engram/scripts/verify-ecosystem.mjs

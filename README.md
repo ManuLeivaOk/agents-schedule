@@ -2,8 +2,8 @@
 
 Infraestructura de **Trabajo Agéntico, Reglas Jerárquicas (`AGENTS.md`), Skills y Memoria Persistente (`Clicke Engram`)** para el ecosistema **Clicke Impulso**:
 
-- **Backend (`nestjs-auth`)**: [`ManuLeivaOk/be-schedule`](https://github.com/ManuLeivaOk/be-schedule)
-- **Web (`frontend`)**: [`ManuLeivaOk/ft-schedule`](https://github.com/ManuLeivaOk/ft-schedule)
+- **Backend (`be-schedule`)**: [`ManuLeivaOk/be-schedule`](https://github.com/ManuLeivaOk/be-schedule)
+- **Web (`ft-schedule`)**: [`ManuLeivaOk/ft-schedule`](https://github.com/ManuLeivaOk/ft-schedule)
 - **Mobile (`app-schedule`)**: [`ManuLeivaOk/app-schedule`](https://github.com/ManuLeivaOk/app-schedule)
 
 ---
@@ -17,13 +17,13 @@ Infraestructura de **Trabajo Agéntico, Reglas Jerárquicas (`AGENTS.md`), Skill
 - [`.agents/plugins/clicke-engram/`](./.agents/plugins/clicke-engram): Plugin MCP para Antigravity.
 - [`.agents/skills/clicke-engram/`](./.agents/skills/clicke-engram): Skill con diccionario canónico de enums, mapa de endpoints HTTP y verificador TypeScript transversal (`verify-ecosystem.mjs`).
 - [`.agents/skills/clicke-cross-stack-feature/`](./.agents/skills/clicke-cross-stack-feature): Skill con el runbook paso a paso para implementar features en las 3 capas.
-- [`.agents/subprojects/`](./.agents/subprojects): Copias versionadas de los `AGENTS.md` de cada subproyecto (`nestjs-auth`, `frontend`, `app-schedule`) y script `sync-subproject-rules.mjs` para sincronizarlos.
+- [`.agents/subprojects/`](./.agents/subprojects): Copias versionadas de los `AGENTS.md` de cada subproyecto (`be-schedule`, `ft-schedule`, `app-schedule`) y script `sync-subproject-rules.mjs` para sincronizarlos.
 
 ---
 
 ## Puesta en Marcha Rápida
 
-1. Clonar este repositorio como raíz del workspace y dentro de él los 3 repositorios del ecosistema (`nestjs-auth`, `frontend`, `app-schedule`).
+1. Clonar este repositorio como raíz del workspace y dentro de él los 3 repositorios del ecosistema (`be-schedule`, `ft-schedule`, `app-schedule`).
 2. Sincronizar los archivos `AGENTS.md` dentro de cada subproyecto e inicializar la base SQLite FTS5 de Engram:
    ```bash
    node --no-warnings .agents/subprojects/sync-subproject-rules.mjs

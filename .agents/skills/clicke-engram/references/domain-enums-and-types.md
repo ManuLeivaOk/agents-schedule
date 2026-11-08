@@ -6,8 +6,8 @@ Este documento refleja las definiciones reales en código TypeScript de los 3 re
 
 ## 1. Turnos (`Appointments`)
 
-- **Backend**: [`nestjs-auth/src/appointments/entities/appointment.entity.ts`](../../../../nestjs-auth/src/appointments/entities/appointment.entity.ts)
-- **Web**: [`frontend/src/types/appointments.ts`](../../../../frontend/src/types/appointments.ts)
+- **Backend**: [`be-schedule/src/appointments/entities/appointment.entity.ts`](../../../../be-schedule/src/appointments/entities/appointment.entity.ts)
+- **Web**: [`ft-schedule/src/types/appointments.ts`](../../../../ft-schedule/src/types/appointments.ts)
 - **Mobile**: [`app-schedule/src/appointments/types.ts`](../../../../app-schedule/src/appointments/types.ts) y [`parse.ts`](../../../../app-schedule/src/appointments/parse.ts)
 
 ```ts
@@ -27,8 +27,8 @@ export type AppointmentSource = 'ADMIN' | 'CUSTOMER' | 'IMPORT'
 
 ## 2. Recursos (`Resources`) y Disponibilidad (`Availability`)
 
-- **Backend**: [`nestjs-auth/src/resources/entities/resource.entity.ts`](../../../../nestjs-auth/src/resources/entities/resource.entity.ts)
-- **Web**: [`frontend/src/services/resources-api.ts`](../../../../frontend/src/services/resources-api.ts)
+- **Backend**: [`be-schedule/src/resources/entities/resource.entity.ts`](../../../../be-schedule/src/resources/entities/resource.entity.ts)
+- **Web**: [`ft-schedule/src/services/resources-api.ts`](../../../../ft-schedule/src/services/resources-api.ts)
 - **Mobile**: [`app-schedule/src/catalog/types.ts`](../../../../app-schedule/src/catalog/types.ts)
 
 ```ts
@@ -43,8 +43,8 @@ export type ResourceType = 'PERSON' | 'SPACE' | 'EQUIPMENT' | 'GENERIC'
 
 ## 3. Automatizaciones y WhatsApp (`Automations`)
 
-- **Backend**: [`nestjs-auth/src/automations/entities/automation-rule.entity.ts`](../../../../nestjs-auth/src/automations/entities/automation-rule.entity.ts) y [`automation-execution.entity.ts`](../../../../nestjs-auth/src/automations/entities/automation-execution.entity.ts)
-- **Web**: [`frontend/src/types/automations.ts`](../../../../frontend/src/types/automations.ts)
+- **Backend**: [`be-schedule/src/automations/entities/automation-rule.entity.ts`](../../../../be-schedule/src/automations/entities/automation-rule.entity.ts) y [`automation-execution.entity.ts`](../../../../be-schedule/src/automations/entities/automation-execution.entity.ts)
+- **Web**: [`ft-schedule/src/types/automations.ts`](../../../../ft-schedule/src/types/automations.ts)
 - **Mobile**: [`app-schedule/src/automations/types.ts`](../../../../app-schedule/src/automations/types.ts)
 
 ```ts
@@ -75,8 +75,8 @@ export type AutomationExecutionStatus =
 
 ## 4. Roles, Organizaciones y Feature Flags
 
-- **Backend**: [`organization.entity.ts`](../../../../nestjs-auth/src/organizations/entities/organization.entity.ts), [`organization-member.entity.ts`](../../../../nestjs-auth/src/organizations/entities/organization-member.entity.ts), [`user.entity.ts`](../../../../nestjs-auth/src/users/entities/user.entity.ts)
-- **Web**: [`frontend/src/types/auth.ts`](../../../../frontend/src/types/auth.ts)
+- **Backend**: [`organization.entity.ts`](../../../../be-schedule/src/organizations/entities/organization.entity.ts), [`organization-member.entity.ts`](../../../../be-schedule/src/organizations/entities/organization-member.entity.ts), [`user.entity.ts`](../../../../be-schedule/src/users/entities/user.entity.ts)
+- **Web**: [`ft-schedule/src/types/auth.ts`](../../../../ft-schedule/src/types/auth.ts)
 - **Mobile**: [`app-schedule/src/auth/types.ts`](../../../../app-schedule/src/auth/types.ts)
 
 ```ts

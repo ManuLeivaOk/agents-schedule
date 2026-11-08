@@ -8,8 +8,8 @@ Este workspace aloja los **3 repositorios independientes** que conforman la plat
 
 | Capa | Directorio | Stack Principal | Puerto / Entorno |
 | :--- | :--- | :--- | :--- |
-| **Backend API** | [`nestjs-auth/`](./nestjs-auth) | NestJS 11, TypeORM 0.3, PostgreSQL, Passport JWT, Argon2, Luxon | `http://localhost:3000` |
-| **App Web** | [`frontend/`](./frontend) | Next.js 16 (App Router), React 19, Tailwind CSS v4, Base UI / shadcn, Schedule-X | `http://localhost:3001` |
+| **Backend API** | [`be-schedule/`](./be-schedule) | NestJS 11, TypeORM 0.3, PostgreSQL, Passport JWT, Argon2, Luxon | `http://localhost:3000` |
+| **App Web** | [`ft-schedule/`](./ft-schedule) | Next.js 16 (App Router), React 19, Tailwind CSS v4, Base UI / shadcn, Schedule-X | `http://localhost:3001` |
 | **App Mobile** | [`app-schedule/`](./app-schedule) | Expo 58, React Native 0.88, React 19.3, Expo Router, TanStack Query v5 | Expo Metro / iOS & Android |
 
 > **Importante:** No existe un paquete npm compartido (`shared-types`) entre los 3 repositorios. Los contratos HTTP, tipos de dominio y validaciones deben mantenerse **explícitamente sincronizados** entre las tres capas.
@@ -20,7 +20,7 @@ Este workspace aloja los **3 repositorios independientes** que conforman la plat
 
 Antes de modificar un endpoint, DTO, estado o regla de negocio en cualquiera de los proyectos, verificá sus contrapartes en la siguiente matriz:
 
-| Dominio | Backend (`nestjs-auth/src/`) | Web (`frontend/src/`) | Mobile (`app-schedule/src/`) |
+| Dominio | Backend (`be-schedule/src/`) | Web (`ft-schedule/src/`) | Mobile (`app-schedule/src/`) |
 | :--- | :--- | :--- | :--- |
 | **Autenticación** | `auth/auth.controller.ts` (`/auth/*` y `/auth/native/*`) | `lib/api-client.ts`, `providers/auth-provider.tsx` | `auth/api.ts`, `auth/token-store.ts`, `auth/auth-provider.tsx` |
 | **Permisos / Roles** | `organizations/guards/org-roles.guard.ts` | `providers/auth-provider.tsx`, `config/navigation.ts` | `auth/roles.ts`, `auth/admin-only.tsx` |

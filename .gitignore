@@ -2,9 +2,13 @@
 .DS_Store
 
 # Sub-repositories (versioned in their own Git repos: be-schedule, ft-schedule, app-schedule)
+be-schedule/
+ft-schedule/
+app-schedule/
+
+# Legacy folder names (just in case)
 nestjs-auth/
 frontend/
-app-schedule/
 
 # Local SQLite database binaries (seed-memories.json is versioned instead)
 .agents/engram/*.db
