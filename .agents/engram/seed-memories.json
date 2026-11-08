@@ -144,5 +144,23 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-08T20:43:15.300Z"
+  },
+  {
+    "topic_key": "contract/analytics-daily-breakdown-and-pdf-privacy",
+    "scope": "contracts",
+    "type": "contract",
+    "title": "Desglose diario de analíticas por estado/servicio/recurso y exclusión de teléfono en PDF semanal",
+    "content": "1. GET /analytics/overview incluye pending y confirmed en cada item de daily, además de dailyBreakdown ({ date, status, serviceId, serviceName, resourceId, resourceName, appointments }[]) para permitir desglosar y filtrar el gráfico de Turnos por día por estado, servicio y recurso en Web y Mobile.\\n2. La exportación PDF de agenda semanal por recurso (exportResourceWeekPdf) omite el teléfono del cliente y muestra únicamente el DNI en la columna de documento.",
+    "files": [
+      "be-schedule/src/analytics/analytics.service.ts",
+      "ft-schedule/src/types/analytics.ts",
+      "ft-schedule/src/components/ui/dashboard/dashboard-view.tsx",
+      "ft-schedule/src/lib/export-resource-week-pdf.ts",
+      "app-schedule/src/analytics/types.ts",
+      "app-schedule/src/analytics/parse.ts",
+      "app-schedule/src/analytics/daily-charts.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-08T21:14:11.434Z"
   }
 ]
