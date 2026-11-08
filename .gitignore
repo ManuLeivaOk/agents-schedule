@@ -1,0 +1,18 @@
+# OS & Editor
+.DS_Store
+
+# Sub-repositories (versioned in their own Git repos: be-schedule, ft-schedule, app-schedule)
+nestjs-auth/
+frontend/
+app-schedule/
+
+# Local SQLite database binaries (seed-memories.json is versioned instead)
+.agents/engram/*.db
+.agents/engram/*.db-wal
+.agents/engram/*.db-shm
+
+# Local business / financial notes not part of agents-schedule
+ESTIMACION-COSTOS-DESPLIEGUE.md
+ESTRATEGIA-SUSCRIPCIONES-Y-PLANES.md
+IDEAS-DE-MEJORA.md
+MODELO-PAGO-INICIAL-Y-MANTENIMIENTO.md

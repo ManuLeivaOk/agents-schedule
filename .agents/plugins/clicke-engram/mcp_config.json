@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "clicke-engram": {
+      "command": "node",
+      "args": [
+        "--no-warnings",
+        ".agents/engram/engram.mjs",
+        "mcp"
+      ]
+    }
+  }
+}
