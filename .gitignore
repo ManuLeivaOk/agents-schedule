@@ -14,9 +14,3 @@ frontend/
 .agents/engram/*.db
 .agents/engram/*.db-wal
 .agents/engram/*.db-shm
-
-# Local business / financial notes not part of agents-schedule
-ESTIMACION-COSTOS-DESPLIEGUE.md
-ESTRATEGIA-SUSCRIPCIONES-Y-PLANES.md
-IDEAS-DE-MEJORA.md
-MODELO-PAGO-INICIAL-Y-MANTENIMIENTO.md
