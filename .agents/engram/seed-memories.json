@@ -162,5 +162,32 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-08T21:14:11.434Z"
+  },
+  {
+    "topic_key": "bugfix/schedule-resource-color",
+    "scope": "web",
+    "type": "bugfix",
+    "title": "Aplicación de resource.metadata.color en la vista /schedule (Web)",
+    "content": "En ft-schedule (/schedule), el color asignado a cada recurso (resource.metadata.color) ahora impacta en: 1) borde izquierdo y fondo translúcido (color-mix) de los bloques de turnos en las grillas Día y Semana y en la vista Lista (manteniendo el StatusRing + texto para el estado del turno), 2) punto indicador de color junto al nombre del recurso en las tarjetas y en el filtro Select de recursos, 3) bloques de disponibilidad horaria por recurso, y 4) modal de detalle del turno.",
+    "files": [
+      "ft-schedule/src/types/appointments.ts",
+      "ft-schedule/src/components/ui/schedule/appointments-calendar-view.tsx",
+      "ft-schedule/src/components/ui/schedule/appointment-detail-dialog.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-10T02:07:25.588Z"
+  },
+  {
+    "topic_key": "decision/schedule-drag-and-drop-and-slot-creation",
+    "scope": "web",
+    "type": "decision",
+    "title": "Drag & Drop, Resize y Agendado Directo desde Grilla en /schedule",
+    "content": "En ft-schedule (/schedule): 1) Se puede arrastrar cualquier turno (modo move) con snap de 15 minutos tanto verticalmente (cambio de hora) como horizontalmente entre columnas en vista Semana (cambio de día), y estirar desde el borde inferior (modo resize) para cambiar durationMinutes, con actualización optimista y rollback automático si PATCH /appointments/:id devuelve conflicto. 2) Al hacer clic o clic-y-arrastrar en un hueco libre de la grilla se abre CreateAppointmentDialog pre-cargando fecha, hora sugerida (defaultTime), duración arrastrada (defaultDurationMinutes) y auto-seleccionando recurso y slot.",
+    "files": [
+      "ft-schedule/src/components/ui/schedule/appointments-calendar-view.tsx",
+      "ft-schedule/src/components/ui/appointments/create-appointment-dialog.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-10T02:24:56.924Z"
   }
 ]

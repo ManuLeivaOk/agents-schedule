@@ -52,6 +52,10 @@ for (const target of selected) {
   const res = spawnSync(target.cmd, target.args, {
     cwd: target.cwd,
     encoding: 'utf8',
+    env: {
+      ...process.env,
+      PATH: `${path.dirname(process.execPath)}:/usr/local/bin:/opt/homebrew/bin:${process.env.PATH || ''}`,
+    },
   })
   const elapsedMs = Date.now() - start
   const ok = res.status === 0

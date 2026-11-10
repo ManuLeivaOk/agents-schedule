@@ -41,35 +41,46 @@ function initDb() {
       revision INTEGER NOT NULL DEFAULT 1,
       updated_at TEXT NOT NULL
     );
-
-    CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
-      topic_key,
-      scope,
-      type,
-      title,
-      content,
-      files_json,
-      content='memories',
-      content_rowid='id'
-    );
-
-    CREATE TRIGGER IF NOT EXISTS memories_ai AFTER INSERT ON memories BEGIN
-      INSERT INTO memories_fts(rowid, topic_key, scope, type, title, content, files_json)
-      VALUES (new.id, new.topic_key, new.scope, new.type, new.title, new.content, new.files_json);
-    END;
-
-    CREATE TRIGGER IF NOT EXISTS memories_ad AFTER DELETE ON memories BEGIN
-      INSERT INTO memories_fts(memories_fts, rowid, topic_key, scope, type, title, content, files_json)
-      VALUES ('delete', old.id, old.topic_key, old.scope, old.type, old.title, old.content, old.files_json);
-    END;
-
-    CREATE TRIGGER IF NOT EXISTS memories_au AFTER UPDATE ON memories BEGIN
-      INSERT INTO memories_fts(memories_fts, rowid, topic_key, scope, type, title, content, files_json)
-      VALUES ('delete', old.id, old.topic_key, old.scope, old.type, old.title, old.content, old.files_json);
-      INSERT INTO memories_fts(rowid, topic_key, scope, type, title, content, files_json)
-      VALUES (new.id, new.topic_key, new.scope, new.type, new.title, new.content, new.files_json);
-    END;
   `)
+
+  try {
+    db.exec(`
+      CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
+        topic_key,
+        scope,
+        type,
+        title,
+        content,
+        files_json,
+        content='memories',
+        content_rowid='id'
+      );
+
+      CREATE TRIGGER IF NOT EXISTS memories_ai AFTER INSERT ON memories BEGIN
+        INSERT INTO memories_fts(rowid, topic_key, scope, type, title, content, files_json)
+        VALUES (new.id, new.topic_key, new.scope, new.type, new.title, new.content, new.files_json);
+      END;
+
+      CREATE TRIGGER IF NOT EXISTS memories_ad AFTER DELETE ON memories BEGIN
+        INSERT INTO memories_fts(memories_fts, rowid, topic_key, scope, type, title, content, files_json)
+        VALUES ('delete', old.id, old.topic_key, old.scope, old.type, old.title, old.content, old.files_json);
+      END;
+
+      CREATE TRIGGER IF NOT EXISTS memories_au AFTER UPDATE ON memories BEGIN
+        INSERT INTO memories_fts(memories_fts, rowid, topic_key, scope, type, title, content, files_json)
+        VALUES ('delete', old.id, old.topic_key, old.scope, old.type, old.title, old.content, old.files_json);
+        INSERT INTO memories_fts(rowid, topic_key, scope, type, title, content, files_json)
+        VALUES (new.id, new.topic_key, new.scope, new.type, new.title, new.content, new.files_json);
+      END;
+    `)
+  } catch {
+    // If current Node build does not bundle FTS5, drop FTS triggers so standard SQLite queries work seamlessly
+    db.exec(`
+      DROP TRIGGER IF EXISTS memories_ai;
+      DROP TRIGGER IF EXISTS memories_ad;
+      DROP TRIGGER IF EXISTS memories_au;
+    `)
+  }
 
   const countRow = db.prepare('SELECT COUNT(*) AS count FROM memories').get()
   if (countRow && countRow.count === 0 && fs.existsSync(SEED_PATH)) {
@@ -231,6 +242,22 @@ function searchMemories(db, { query, scope, type, limit = 10 } = {}) {
   return rows.map(formatRow)
 }
 
+function runWithFtsFallback(db, fn) {
+  try {
+    return fn()
+  } catch (err) {
+    if (String(err?.message || '').includes('fts5')) {
+      db.exec(`
+        DROP TRIGGER IF EXISTS memories_ai;
+        DROP TRIGGER IF EXISTS memories_ad;
+        DROP TRIGGER IF EXISTS memories_au;
+      `)
+      return fn()
+    }
+    throw err
+  }
+}
+
 function saveMemory(db, { topic_key, scope = 'global', type = 'decision', title, content, files = [] }) {
   if (!topic_key || !title || !content) {
     throw new Error('topic_key, title, and content are required to save an Engram.')
@@ -248,18 +275,20 @@ function saveMemory(db, { topic_key, scope = 'global', type = 'decision', title,
     .prepare('SELECT id, revision FROM memories WHERE topic_key = ?')
     .get(topic_key)
 
-  if (existing) {
-    db.prepare(
-      `UPDATE memories
-       SET scope = ?, type = ?, title = ?, content = ?, files_json = ?, revision = revision + 1, updated_at = ?
-       WHERE topic_key = ?`,
-    ).run(normalizedScope, normalizedType, title, content, JSON.stringify(filesArray), now, topic_key)
-  } else {
-    db.prepare(
-      `INSERT INTO memories (topic_key, scope, type, title, content, files_json, revision, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, 1, ?)`,
-    ).run(topic_key, normalizedScope, normalizedType, title, content, JSON.stringify(filesArray), now)
-  }
+  runWithFtsFallback(db, () => {
+    if (existing) {
+      db.prepare(
+        `UPDATE memories
+         SET scope = ?, type = ?, title = ?, content = ?, files_json = ?, revision = revision + 1, updated_at = ?
+         WHERE topic_key = ?`,
+      ).run(normalizedScope, normalizedType, title, content, JSON.stringify(filesArray), now, topic_key)
+    } else {
+      db.prepare(
+        `INSERT INTO memories (topic_key, scope, type, title, content, files_json, revision, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, 1, ?)`,
+      ).run(topic_key, normalizedScope, normalizedType, title, content, JSON.stringify(filesArray), now)
+    }
+  })
 
   exportSeedsSnapshot(db)
   const saved = db
