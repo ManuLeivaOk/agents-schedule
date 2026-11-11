@@ -189,5 +189,17 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-10T02:24:56.924Z"
+  },
+  {
+    "topic_key": "bugfix/automations-controller-roles-guard",
+    "scope": "backend",
+    "type": "bugfix",
+    "title": "Protección de AutomationsController con @OrgRoles(OWNER, ADMIN)",
+    "content": "Se agregó @OrgRoles(OrganizationRole.OWNER, OrganizationRole.ADMIN) a nivel clase en AutomationsController para asegurar que STAFF no acceda a GET /automations ni a GET /automations/executions (403 Forbidden), cumpliendo la regla de autorización transversal del ecosistema Clicke.",
+    "files": [
+      "be-schedule/src/automations/automations.controller.ts"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-11T01:25:02.176Z"
   }
 ]
