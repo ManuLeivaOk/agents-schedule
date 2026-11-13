@@ -230,5 +230,23 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-12T17:07:01.204Z"
+  },
+  {
+    "topic_key": "contract/availability-overrides-and-blocks",
+    "scope": "contracts",
+    "type": "contract",
+    "title": "Contrato de Excepciones de Disponibilidad y Ausencias (Availability Overrides)",
+    "content": "Soporte integral para ausencias puntuales (vacaciones, licencias, trámites) y disponibilidades excepcionales (guardias, compensación de días) por recurso en Clicke Impulso.\n1. Entidad y Migración (AvailabilityBlock):\n- type: 'BLOCK' (bloqueo/ausencia) | 'OVERRIDE' (disponibilidad especial).\n- reason: 'PERSONAL' | 'VACATION' | 'HOLIDAY' | 'MAINTENANCE' | 'COMPENSATION' | 'OTHER'.\n- startsAt, endsAt (timestamptz), notes (varchar 250).\n2. Endpoints:\n- GET /availability/blocks: lista excepciones con filtros opcionales (resourceId, type, from, to).\n- POST /availability/blocks: alta de bloqueo o disponibilidad especial (valida startsAt < endsAt y pertenencia a la org). Requiere rol OWNER o ADMIN.\n- DELETE /availability/blocks/:id: eliminación de la excepción.\n3. Motor de Cálculo (AvailabilityService):\n- isAvailable: rechaza si colisiona con un BLOCK. Acepta de inmediato si está cubierto por un OVERRIDE. Si no, evalúa reglas semanales regulares.\n- getResourceAvailability & getDayAvailabilityForUser: combinan las franjas de reglas recurrentes con las franjas habilitadas por OVERRIDEs, y restan tanto appointments ocupados como BLOCKs.\n4. Frontend Web (ft-schedule):\n- ResourceAvailabilityDialog con dos pestañas: 'Horarios Habituales' y 'Ausencias y Excepciones'.\n- ResourceExceptionsTab permite gestionar la lista de excepciones con badges de estado (rojo/verde), rango formateado en español y formulario ágil (día completo vs franja horaria puntual).\n5. Exclusión Mobile: Funcionalidad implementada exclusivamente en Backend y Web, preservando app-schedule intacto.",
+    "files": [
+      "be-schedule/src/availability/entities/availability-block.entity.ts",
+      "be-schedule/src/availability/availability.service.ts",
+      "be-schedule/src/availability/availability.controller.ts",
+      "be-schedule/src/migrations/1793000000000-AddAvailabilityBlockTypeAndCompensation.ts",
+      "ft-schedule/src/services/availability-rules-api.ts",
+      "ft-schedule/src/components/ui/resources/resource-availability-dialog.tsx",
+      "ft-schedule/src/components/ui/resources/resource-exceptions-tab.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-13T13:46:48.847Z"
   }
 ]
