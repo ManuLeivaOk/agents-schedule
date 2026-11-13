@@ -201,5 +201,34 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-11T01:25:02.176Z"
+  },
+  {
+    "topic_key": "decision/public-booking-dni-and-mobile-exclusion",
+    "scope": "global",
+    "type": "decision",
+    "title": "Reservas Públicas por Link: Validación por DNI y Exclusión de App Mobile",
+    "content": "1. La funcionalidad de agendamiento público vía enlace web (/reservar/[slug]) está restringida exclusivamente a clientes ya registrados en la organización mediante validación de DNI (documentNumber). Clientes no registrados no pueden agendar turnos libremente y deben contactar al negocio para solicitar el alta.\\n2. La app mobile (app-schedule) no incorpora ni evoluciona con esta funcionalidad de reservas por decisión explícita de producto, manteniéndose sin modificaciones.",
+    "files": [
+      "app-schedule/README.md",
+      "be-schedule/src/organizations/entities/organization.entity.ts",
+      "ft-schedule/app/(public)/reservar/[slug]/page.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-12T16:51:09.453Z"
+  },
+  {
+    "topic_key": "contract/public-booking-api",
+    "scope": "contracts",
+    "type": "contract",
+    "title": "Contrato de Endpoints Públicos de Reservas (/public/bookings/*) y Validación por DNI",
+    "content": "1. GET /public/bookings/:slug/info: Devuelve datos del negocio (id, name, slug, timezone, currency), servicios activos y recursos disponibles.\\n2. POST /public/bookings/:slug/validate-dni: Valida si existe un cliente activo registrado con ese documentNumber en la organización (buscando por DNI encriptado y plano). Devuelve { registered: true, customerId, firstName, lastName } o 404 si no existe.\\n3. GET /public/bookings/:slug/availability?date=...&serviceId=...&resourceId=...: Devuelve slots libres por recurso para el día y servicio seleccionado.\\n4. POST /public/bookings/:slug/book: Crea el turno con source: CUSTOMER y status: CONFIRMED. Requiere documentNumber obligatorio; si el DNI no está registrado en la organización, rechaza la operación (400). Previene solapamiento mediante exclusion constraints (23P01) y dispara el motor de automatizaciones (WhatsApp/notificaciones).\\n5. Exclusión Mobile: Esta funcionalidad es exclusiva del stack Backend y Web (/reservar/[slug]), no se implementa en app-schedule.",
+    "files": [
+      "be-schedule/src/public-bookings/public-bookings.controller.ts",
+      "be-schedule/src/public-bookings/public-bookings.service.ts",
+      "ft-schedule/src/services/public-bookings-api.ts",
+      "ft-schedule/app/(public)/reservar/[slug]/page.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-12T17:07:01.204Z"
   }
 ]
