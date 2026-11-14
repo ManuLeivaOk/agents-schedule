@@ -66,3 +66,8 @@ Este workspace cuenta con el motor de memoria **Clicke Engram** (SQLite + FTS5 e
     --key="contract/<slug>" --scope="contracts" --type="contract" \
     --title="<título>" --content="<detalle>" --files="ruta1,ruta2"
   ```
+
+---
+
+## 5. Estilo de Comunicación y Respuestas
+- **Concisión estricta**: No dar explicaciones extensas, introducciones teóricas o detalles redundantes a menos que el usuario lo solicite expresamente. Ir directo a la acción y al resultado concreto.

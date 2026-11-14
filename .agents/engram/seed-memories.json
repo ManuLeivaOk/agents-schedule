@@ -248,5 +248,45 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-13T13:46:48.847Z"
+  },
+  {
+    "topic_key": "pref/concise-responses",
+    "scope": "global",
+    "type": "decision",
+    "title": "Preferencia de comunicación: Respuestas concisas y directas",
+    "content": "El usuario solicitó no dar explicaciones extensas a menos que lo pida explícitamente. Ir directo a la acción y al resultado concreto.",
+    "files": [
+      "AGENTS.md"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-14T14:52:19.851Z"
+  },
+  {
+    "topic_key": "deps/replace-xlsx-with-exceljs",
+    "scope": "backend",
+    "type": "decision",
+    "title": "Reemplazo de xlsx por exceljs y csv-parse por vulnerabilidades CVE",
+    "content": "Se eliminó xlsx (SheetJS) debido a CVE-2023-30533, CVE-2024-22363 y abandono en npm registry. Se reemplazó por exceljs y csv-parse en ImportParserService e ImportTemplateService.",
+    "files": [
+      "be-schedule/package.json",
+      "be-schedule/src/imports/services/import-parser.service.ts",
+      "be-schedule/src/imports/services/import-template.service.ts"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-14T14:52:24.742Z"
+  },
+  {
+    "topic_key": "arch/package-manager-pnpm",
+    "scope": "global",
+    "type": "decision",
+    "title": "Migración integral de npm a pnpm en el ecosistema Clicke Impulso",
+    "content": "Se migró be-schedule, ft-schedule y app-schedule de npm a pnpm v12 con node-linker=hoisted en .npmrc y pnpm-workspace.yaml para overrides. Auditoría limpia con 0 vulnerabilidades en los 3 repositorios.",
+    "files": [
+      "be-schedule/pnpm-lock.yaml",
+      "ft-schedule/pnpm-lock.yaml",
+      "app-schedule/pnpm-lock.yaml"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-14T16:22:33.284Z"
   }
 ]
