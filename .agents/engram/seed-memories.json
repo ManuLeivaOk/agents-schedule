@@ -288,5 +288,24 @@
     ],
     "revision": 1,
     "updated_at": "2026-11-14T16:22:33.284Z"
+  },
+  {
+    "topic_key": "contract/allow-public-booking-switch",
+    "scope": "contracts",
+    "type": "contract",
+    "title": "Switch allowPublicBooking en Servicios y Recursos para Turnero Público",
+    "content": "Incorporación del campo booleano allowPublicBooking (default true) en Servicios y Recursos. En be-schedule filtra la disponibilidad y consulta pública (/public/bookings/*) y bloquea reservas online no autorizadas. En ft-schedule y app-schedule se añadieron los controles visuales (Switch y StateChip) y badges de estado ('Solo interno').",
+    "files": [
+      "be-schedule/src/migrations/1794000000000-AddAllowPublicBookingToServicesAndResources.ts",
+      "be-schedule/src/services/entities/service.entity.ts",
+      "be-schedule/src/resources/entities/resource.entity.ts",
+      "be-schedule/src/public-bookings/public-bookings.service.ts",
+      "ft-schedule/src/components/ui/services/service-form-dialog.tsx",
+      "ft-schedule/src/components/ui/resources/resource-form-dialog.tsx",
+      "app-schedule/src/services/service-form.tsx",
+      "app-schedule/src/resources/resource-form.tsx"
+    ],
+    "revision": 1,
+    "updated_at": "2026-11-14T18:59:06.051Z"
   }
 ]
